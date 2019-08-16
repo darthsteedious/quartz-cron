@@ -1,0 +1,17 @@
+{
+  "name": "quartz-cron",
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "tape tests/**/*.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "tape": "^4.11.0"
+  }
+}
