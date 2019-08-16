@@ -1,4 +1,4 @@
-`const { isDigit } = require('./util');
+const { isDigit } = require('./util');
 
 const WhiteSpace = 'whitespace';
 const Digit = 'digit';
@@ -89,4 +89,4 @@ function tokenize(str) {
     return tokens;
 }
 
-module.exports = tokenize;`
+module.exports = tokenize;
