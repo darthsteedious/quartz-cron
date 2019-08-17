@@ -50,3 +50,15 @@ test('tokenize empty is done', t => {
 
     t.ok(cur.done);
 });
+
+test('tokenize unknown token', t => {
+    t.plan(1);
+
+    const result = [
+        tokens.DigitToken(3),
+        tokens.UnknownToken(),
+        tokens.DigitToken(1)
+    ];
+
+    t.deepEqual(collectTokens(tokenize, '3#1'), result);
+});
