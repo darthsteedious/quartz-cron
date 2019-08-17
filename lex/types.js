@@ -1,5 +1,5 @@
 const WhiteSpace = 'whitespace';
-const Digit = 'digit';
+const Number = 'number';
 const Range = 'range';
 const Separator = 'separator';
 const Step = 'step';
@@ -9,7 +9,7 @@ const Unknown = 'unknown';
 
 module.exports = {
     WhiteSpace,
-    Digit,
+    Number,
     Range,
     Separator,
     Step,

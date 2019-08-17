@@ -5,7 +5,7 @@ const { lpartial } = require('../util');
 const createTokenBuilder = type => value => ({ value, type });
 
 const WhiteSpaceToken = lpartial(createTokenBuilder(types.WhiteSpace),  constants.Whitespace);
-const DigitToken = createTokenBuilder(types.Digit);
+const NumberToken = createTokenBuilder(types.Number);
 const RangeToken = lpartial(createTokenBuilder(types.Range), constants.Range);
 const SeparatorToken = lpartial(createTokenBuilder(types.Separator), constants.Separator);
 const StepToken = lpartial(createTokenBuilder(types.Step), constants.Step);
@@ -16,7 +16,7 @@ const UnknownToken = createTokenBuilder(types.Unknown);
 
 module.exports = {
     WhiteSpaceToken,
-    DigitToken,
+    NumberToken,
     RangeToken,
     SeparatorToken,
     StepToken,

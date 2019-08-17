@@ -8,29 +8,29 @@ test('tokenizes 0-9', t => {
 
     const iter = tokenize('0-9');
     let cur = iter.next();
-    t.deepEqual(cur.value, tokens.DigitToken(0));
+    t.deepEqual(cur.value, tokens.NumberToken('0'), 'Token should be NumberToken(0)');
 
     cur = iter.next();
-    t.deepEqual(cur.value, tokens.RangeToken());
+    t.deepEqual(cur.value, tokens.RangeToken(), 'Token should be RangeToken');
 
     cur = iter.next();
-    t.deepEqual(cur.value, tokens.DigitToken(9));
+    t.deepEqual(cur.value, tokens.NumberToken('9'), 'Token should be NumberToken(9)');
 
     cur = iter.next();
     t.ok(cur.done);
 });
 
 test('tokenize 0/3 0 0 ? * *', t => {
-    t.plan(1);
+    // t.plan(1);
 
     const result = [
-        tokens.DigitToken(0),
+        tokens.NumberToken('0'),
         tokens.StepToken(),
-        tokens.DigitToken(3),
+        tokens.NumberToken('3'),
         tokens.WhiteSpaceToken(),
-        tokens.DigitToken(0),
+        tokens.NumberToken('0'),
         tokens.WhiteSpaceToken(),
-        tokens.DigitToken(0),
+        tokens.NumberToken('0'),
         tokens.WhiteSpaceToken(),
         tokens.NoneToken(),
         tokens.WhiteSpaceToken(),
@@ -39,7 +39,9 @@ test('tokenize 0/3 0 0 ? * *', t => {
         tokens.AllToken()
     ];
 
-    t.deepEqual(collectTokens(tokenize,'0/3 0 0 ? * *'), result);
+    t.plan(result.length);
+
+    collectTokens(tokenize,'0/3 0 0 ? * *').forEach((token, i) => t.equal(token.value, result[i].value, `Token should be (${result[i].type}, ${result[i].value})`));
 });
 
 test('tokenize empty is done', t => {
@@ -48,17 +50,17 @@ test('tokenize empty is done', t => {
     const iter = tokenize('');
     const cur = iter.next();
 
-    t.ok(cur.done);
+    t.ok(cur.done, 'Iterator should be done');
 });
 
 test('tokenize unknown token', t => {
-    t.plan(1);
-
     const result = [
-        tokens.DigitToken(3),
+        tokens.NumberToken('3'),
         tokens.UnknownToken('#'),
-        tokens.DigitToken(1)
+        tokens.NumberToken('1')
     ];
 
-    t.deepEqual(collectTokens(tokenize, '3#1'), result);
+    t.plan(result.length);
+
+    collectTokens(tokenize, '3#1').forEach((token, i) => t.equal(token.value, result[i].value, `Token should be (${result[i].type}, ${result[i].value})`));
 });

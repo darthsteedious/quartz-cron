@@ -1,5 +1,5 @@
-const { isDigit } = require('../util');
 const {
+    isDigit,
     isWhitespaceToken,
     isStepToken,
     isSeparatorToken,
@@ -23,14 +23,14 @@ function* tokenize(str) {
             while (isDigit(cur.value)) {
                 cur = iter.next();
                 if (cur.done) {
-                    yield tokens.DigitToken(parseInt(digitValue, 10));
+                    yield tokens.NumberToken(digitValue, 10);
                     return;
                 }
 
                 if (isDigit(cur.value)) {
                     digitValue += cur.value;
                 } else {
-                    yield tokens.DigitToken(parseInt(digitValue, 10));
+                    yield tokens.NumberToken(digitValue);
                     break;
                 }
             }
