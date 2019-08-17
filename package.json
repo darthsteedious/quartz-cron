@@ -6,7 +6,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "tape tests/**/*.js"
+    "test": "tape tests/**/*.tests.js"
   },
   "author": "",
   "license": "ISC",

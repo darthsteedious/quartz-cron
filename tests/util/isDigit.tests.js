@@ -1,5 +1,5 @@
 const test = require('tape');
-const { isDigit } = require('../util');
+const { isDigit } = require('../../util');
 
 const createIsDigitTest = digit => test(`testing isDigit '${digit}'`, t => {
     t.plan(1);
