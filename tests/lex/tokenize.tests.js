@@ -56,7 +56,7 @@ test('tokenize unknown token', t => {
 
     const result = [
         tokens.DigitToken(3),
-        tokens.UnknownToken(),
+        tokens.UnknownToken('#'),
         tokens.DigitToken(1)
     ];
 
