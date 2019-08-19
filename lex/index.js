@@ -23,7 +23,7 @@ function* tokenize(str) {
             while (isDigit(cur.value)) {
                 cur = iter.next();
                 if (cur.done) {
-                    yield tokens.NumberToken(digitValue, 10);
+                    yield tokens.NumberToken(digitValue);
                     return;
                 }
 
