@@ -40,15 +40,26 @@ const parseSeconds = (iter, cur) => {
     if (current.done) throw errors.UnexpectedEndOfInput(pos);
 
     pos++;
+    let expression = null;
     if (token.type === types.Step) {
-        const { offset, expression } = parseStepRange(number, iter, pos, MAX_SECONDS);
-        return {
-            offset,
-            expression: SecondsExpression(expression)
-        };
+        const { offset, expression: stepRangeExpression } = parseStepRange(number, iter, pos, MAX_SECONDS);
+        pos = offset;
+        expression = SecondsExpression(stepRangeExpression);
     }
 
-    throw new Error('Not implemented');
+    current = iter.next();
+    token = current.value;
+
+    if (!token)
+        throw errors.UnexpectedEndOfInput(pos);
+
+    if (token.type !== types.WhiteSpace)
+        throw errors.UnexpectedTokenError(pos++, token.value, [' ']);
+
+    return {
+        offset: pos,
+        expression
+    };
 
     // return {
     //     offset: pos + 1,

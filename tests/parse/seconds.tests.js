@@ -1,25 +1,9 @@
 const test = require('tape');
 const parseSeconds = require('../../parse/seconds');
 const tokens = require('../../lex/tokens');
+const { arrayToGen, rangeInc } = require('../utils');
 
 const {MAX_SECONDS, MIN_SECONDS} = parseSeconds;
-
-const arrayToGen = function* (tokens) {
-    for (let token of tokens) {
-        yield token;
-    }
-};
-
-const rangeExc = (start, stop) => {
-    let i = start;
-    const result = [];
-    while (i < stop)
-        result.push(i++);
-
-    return result;
-};
-
-const rangeInc = (start, stop) => rangeExc(start, stop + 1);
 
 test('parses all token', t => {
     t.plan(2);
@@ -71,6 +55,6 @@ test('parses step expression', t => {
 
     const {expression, offset} = parseSeconds(iter, cur);
 
-    t.equal(offset, 4, 'Offset should be 4');
+    t.equal(offset, 3, 'Offset should be 3');
     t.deepEquals(expression.eval(), result, 'Range should match [0, 10, 20, 30, 40, 50]');
 });

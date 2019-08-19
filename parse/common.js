@@ -5,8 +5,8 @@ const { Additionals, StepRange, Range, Number } = require('./expressions');
 const parseStepRange = (n, iter, pos, max) => {
     let current = iter.next();
     let token = current.value;
-    pos++;
-
+    // console.dir(n);
+    // console.dir(pos);
     if (token.type !== types.Number)
         throw errors.UnexpectedTokenError(pos, token.value, ['0-9']);
 
@@ -15,15 +15,9 @@ const parseStepRange = (n, iter, pos, max) => {
     if (step > max)
         throw new Error(`Step value cannot exceed the maximum of ${max}`);
 
-    current = iter.next();
-    token = current.value;
+    // current = iter.next();
+    // token = current.value;
     pos += stepLen;
-
-    if (!token)
-        throw errors.UnexpectedEndOfInput(pos);
-
-    if (token.type !== types.WhiteSpace)
-        throw errors.UnexpectedTokenError(pos, token.value, exports[' ']);
 
     return {
         offset: pos,
