@@ -1,9 +1,8 @@
 const test = require('tape');
 const tokens = require('../../lex/tokens');
-const { Number } = require('../../parse/expressions');
-const { parseStepRange } = require('../../parse/common');
-const { arrayToGen, rangeInc } = require('../utils');
-
+const {Number} = require('../../parse/expressions');
+const {parseStepRange} = require('../../parse/common');
+const {arrayToGen, rangeInc} = require('../utils');
 
 
 const testCases = [
@@ -25,7 +24,7 @@ const testCases = [
             tokens.StepToken(),
             tokens.NumberToken('5')
         ]
-        ,23
+        , 23
     ],
     [
         '0/2',
@@ -57,13 +56,49 @@ testCases.forEach(c => {
         const subN = Number(subStart);
 
         subIter.next();
-        t.doesNotThrow(() => parseStepRange(subN, subIter, subStart.length+1, max), 'Should not throw exception');
+        t.doesNotThrow(() => parseStepRange(subN, subIter, subStart.length + 1, max), 'Should not throw exception');
 
-        console.dir(`pos: ${start.length+1}`);
-        const { offset, expression } = parseStepRange(n, iter, start.length+1, max);
+        console.dir(`pos: ${start.length + 1}`);
+        const {offset, expression} = parseStepRange(n, iter, start.length + 1, max);
 
         t.equal(offset, input.reduce((total, {value}) => total + value.length, 0), 'Should match expected offset');
         t.deepEqual(expression.eval(), expected, 'Should match expected value');
     })
 });
 
+test('should fail when step is above max', t => {
+    t.plan(1);
+
+    const tokenList = [
+        tokens.NumberToken('59')
+    ];
+
+    const iter = arrayToGen(tokenList);
+
+    const n = Number('0');
+    const max = 23;
+
+    t.throws(() => parseStepRange(n, iter, 2, max), new RegExp(`Step value cannot exceed the maximum of ${max}`))
+});
+
+const nonNumberTokens = [
+    tokens.AllToken(),
+    tokens.NoneToken(),
+    tokens.RangeToken(),
+    tokens.SeparatorToken(),
+    tokens.StepToken(),
+    tokens.UnknownToken('#'),
+    tokens.WhiteSpaceToken(),
+];
+
+nonNumberTokens.forEach(token => test(`non-number token ${token.value} should throw`, t => {
+    t.plan(1);
+
+    const iter = arrayToGen([token]);
+
+    const n = Number('0');
+    const max = 23;
+
+    t.throws(() => parseStepRange(n, iter, 2, max),
+        `Unexpected token '${JSON.stringify(token.value)}' at pos ${2}. Expected one of [0-${max}]`, 'should throw unexpected token');
+}));

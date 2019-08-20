@@ -1,7 +1,7 @@
 const types = require('../lex/types');
 const expressions = require('./expressions');
 const errors = require('./errors');
-const { parseStepRange } = require('./common');
+const { parseRange, parseStepRange } = require('./common');
 
 const MIN_SECONDS = 0;
 const MAX_SECONDS = 59;
@@ -12,6 +12,7 @@ const parseSeconds = (iter, cur) => {
     let pos = 0;
     let current = cur;
     let token = current.value;
+
     if (token.type === types.All) {
         pos++;
         current = iter.next();
@@ -30,7 +31,7 @@ const parseSeconds = (iter, cur) => {
     }
 
     if (token.type !== types.Number)
-        throw errors.UnexpectedTokenError(pos, token.value, ['0-9', '*']);
+        throw errors.UnexpectedTokenError(pos, token.value, [`0-${MAX_SECONDS}`, '*']);
 
     const number = expressions.Number(token.value);
     pos += token.value;
@@ -41,10 +42,11 @@ const parseSeconds = (iter, cur) => {
 
     pos++;
     let expression = null;
-    if (token.type === types.Step) {
-        const { offset, expression: stepRangeExpression } = parseStepRange(number, iter, pos, MAX_SECONDS);
+    if (token.type === types.Step || token.type === types.Range) {
+        const parseFunc = token.type === types.Step ? parseStepRange : parseRange;
+        const { offset, expression: resultExpr } = parseFunc(number, iter, pos, MAX_SECONDS);
         pos = offset;
-        expression = SecondsExpression(stepRangeExpression);
+        expression = SecondsExpression(resultExpr);
     }
 
     current = iter.next();
@@ -57,14 +59,9 @@ const parseSeconds = (iter, cur) => {
         throw errors.UnexpectedTokenError(pos++, token.value, [' ']);
 
     return {
-        offset: pos,
+        offset: pos + 1,
         expression
     };
-
-    // return {
-    //     offset: pos + 1,
-    //     expression: null
-    // }
 };
 
 module.exports = parseSeconds;

@@ -2,11 +2,11 @@ const Number = (value) => ({
     eval: () => parseInt(value, 10)
 });
 
-const Range = (start, stop) => ({
+const Range = (lhs, rhs) => ({
     eval: () => {
-        const end = stop.eval();
+        const end = rhs.eval();
         const result = [];
-        for (let i = start.eval(); i < end; i++) {
+        for (let i = lhs.eval(); i <= end; i++) {
             result.push(i);
         }
 
@@ -14,12 +14,12 @@ const Range = (start, stop) => ({
     }
 });
 
-const StepRange = (start, step, max) => ({
+const StepRange = (lhs, rhs, max) => ({
     eval: () => {
-        const adder = step.eval();
+        const adder = rhs.eval();
         const result = [];
 
-        for (let i = start.eval(); i <= max; i += adder)
+        for (let i = lhs.eval(); i <= max; i += adder)
             result.push(i);
 
         return result;

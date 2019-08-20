@@ -55,6 +55,32 @@ test('parses step expression', t => {
 
     const {expression, offset} = parseSeconds(iter, cur);
 
-    t.equal(offset, 3, 'Offset should be 3');
+    t.equal(offset, 4, 'Offset should be 4');
     t.deepEquals(expression.eval(), result, 'Range should match [0, 10, 20, 30, 40, 50]');
+});
+
+test('parses range expression', t => {
+    t.plan(3);
+
+    const result = rangeInc(0, 59);
+
+    const tokenList = [
+        tokens.NumberToken('0'),
+        tokens.RangeToken(),
+        tokens.NumberToken('59'),
+        tokens.WhiteSpaceToken()
+    ];
+
+    const iter = arrayToGen(tokenList);
+    const cur = iter.next();
+
+    const subIter = arrayToGen(tokenList);
+    const subCur = subIter.next();
+
+    t.doesNotThrow(() => parseSeconds(subIter, subCur), /Unexpected end of input after position 4/, 'Should not throw unexpected end of input');
+
+    const {expression, offset} = parseSeconds(iter, cur);
+
+    t.equal(offset, 4, 'Offset should be 4');
+    t.deepEquals(expression.eval(), result, `Range should match ${JSON.stringify(result)}`);
 });
